@@ -8,9 +8,13 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var rolledAmount: Int = 0
+    
     var body: some View {
-        Text("Hello, world!")
-            .padding()
+        VStack {
+            RollResultView(rolledAmount: $rolledAmount)
+            DiceGridView(rolledAmount: $rolledAmount)
+        }
     }
 }
 
