@@ -13,8 +13,15 @@ struct Dice {
     let diceType: NiftyDiceRoller.Dice
 }
 
+struct DiceRoll: Identifiable {
+    let id = UUID()
+    let diceUsed: String
+    let roll: Int
+}
+
 struct DiceGridView: View {
     @Binding var rolledAmount: Int
+    @Binding var diceRolls: [DiceRoll]
     
     let diceTypes: [Dice] = [
         Dice(name: "d4", diceType: .d4),
@@ -38,7 +45,9 @@ struct DiceGridView: View {
         LazyVGrid(columns: columns, alignment: .center) {
             ForEach(diceTypes, id: \.name) { dice in
                 Button {
-                    rolledAmount += diceRoll(dice: dice.diceType)
+                    let roll = diceRoll(dice: dice.diceType)
+                    diceRolls.append(DiceRoll(diceUsed: dice.name, roll: roll))
+                    rolledAmount += roll
                 } label: {
                     Text(dice.name)
                         .foregroundColor(.black)
@@ -47,6 +56,7 @@ struct DiceGridView: View {
             }
             Button {
                 rolledAmount = 0
+                diceRolls = []
             } label: {
                 Image(systemName: "trash")
             }
